@@ -1,0 +1,55 @@
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<GridPane fx:controller="edu.illinois.ideals.batchpackager.Controller"
+          xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="10" vgap="10" styleClass="root">
+<padding><Insets top="25" right="25" bottom="10" left="25"/></padding>
+
+<stylesheets>
+    <URL value="@Packager.css"/>
+</stylesheets>
+
+<Text id="welcome-text" text="Welcome"
+      GridPane.columnIndex="0" GridPane.rowIndex="0"
+      GridPane.columnSpan="2"/>
+
+
+<Button maxWidth="Infinity" fx:id="chooseCsvButton" text="Choose Metadata CSV File"
+        GridPane.columnIndex="0" GridPane.rowIndex="1"
+        onAction="#locateMetadataCsvFile"/>
+
+<Text fx:id="csvFilename"
+      GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+<Button maxWidth="Infinity" fx:id="chooseSourceDirectory" text="Choose Content Source Directory"
+        GridPane.columnIndex="0" GridPane.rowIndex="2"
+        onAction="#locateSourceDirectory"/>
+
+<Text fx:id="sourceDirname"
+      GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+<Button maxWidth="Infinity" fx:id="chooseDestinationDirectory" text="Choose Archive Destination Directory"
+        GridPane.columnIndex="0" GridPane.rowIndex="3"
+        onAction="#locateDestinationDirectory"/>
+
+<Text fx:id="destinationDirname"
+      GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+<Button maxWidth="Infinity" id="validate-button" text="Validate"
+        GridPane.columnIndex="1" GridPane.rowIndex="5"
+        onAction="#handleValidateButtonAction"/>
+
+<Button maxWidth="Infinity" id="package-button" text="Generate DSpace SAF Archive"
+        GridPane.columnIndex="1" GridPane.rowIndex="6"
+        onAction="#handlePackageButtonAction"/>
+
+<Label fx:id="actiontarget" maxWidth="Infinity" wrapText="true" text="Choose a metadata csv file, content source directory, and archive destination directory to get started."
+       GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="8" GridPane.rowSpan="10"/>
+
+
+</GridPane>
