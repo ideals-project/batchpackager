@@ -79,7 +79,9 @@ public class Controller {
         chooser.getExtensionFilters().add(extensionFilter);
         chooser.setTitle("Choose metadata CSV file");
         File file = chooser.showOpenDialog(chooseCsvButton.getScene().getWindow());
-        csvFilename.setText(file.getPath());
+        if(file != null) {
+            csvFilename.setText(file.getPath());
+        }
     }
 
     @FXML
@@ -87,7 +89,9 @@ public class Controller {
         DirectoryChooser chooser = new DirectoryChooser();
         chooser.setTitle("Choose content files source directory");
         File sourceDirectory = chooser.showDialog(chooseSourceDirectory.getScene().getWindow());
-        sourceDirname.setText(sourceDirectory.getPath());
+        if(sourceDirectory != null) {
+            sourceDirname.setText(sourceDirectory.getPath());
+        }
 
     }
 
@@ -96,7 +100,9 @@ public class Controller {
         DirectoryChooser chooser = new DirectoryChooser();
         chooser.setTitle("Choose simple archive format destination directory");
         File destinationDirectory = chooser.showDialog(chooseDestinationDirectory.getScene().getWindow());
-        archiveDirname.setText(destinationDirectory.getPath());
+        if(destinationDirectory != null){
+            archiveDirname.setText(destinationDirectory.getPath());
+        }
     }
 
     public void initialize() {
