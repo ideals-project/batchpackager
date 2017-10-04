@@ -51,12 +51,13 @@ public class SAFPackage {
      * package from input of files and csv metadata.
      */
     public SAFPackage() {
-        URL licenseTextUrl = getClass().getResource("license.txt");
+        URL licenseTextUrl = getClass().getResource("/license.txt");
 
         try {
             licenseString =  new Scanner(licenseTextUrl.openStream()).useDelimiter("\\Z").next();
         }
         catch(IOException ex) {
+            System.out.println("error reading in license string");
             // there was some connection problem, or the file did not exist on the server,
             // or your URL was not in the right format.
             // think about what to do now, and put it here.
@@ -407,7 +408,7 @@ public class SAFPackage {
                         contentsRow = contentsRow.concat("\t" + parameter.trim());
                     }
                 }
-                contentsRow = contentsRow.concat("\t" + "src/resources/license.txt");
+                contentsRow = contentsRow.concat("\t" + "license.txt");
                 contentsWriter.append(contentsRow);
 
                 contentsWriter.newLine();
@@ -650,7 +651,7 @@ public class SAFPackage {
 
         try  {
 
-            File file = new File(itemDirectory + File.separator + "src/resources/license.txt");
+            File file = new File(itemDirectory + File.separator + "license.txt");
             FileWriter fileWriter = new FileWriter(file);
             fileWriter.write(licenseString);
             fileWriter.flush();

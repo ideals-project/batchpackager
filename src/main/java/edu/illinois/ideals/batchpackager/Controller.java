@@ -99,12 +99,12 @@ public class Controller {
         archiveDirname.setText(destinationDirectory.getPath());
     }
 
-//    public void initialize() {
-//        this.printStream = new PrintStream(new Console(console));
-//        System.setOut(printStream);
-//        System.setErr(printStream);
-//        safPackageInstance = new SAFPackage();
-//    }
+    public void initialize() {
+        this.printStream = new PrintStream(new Console(console));
+        System.setOut(printStream);
+        System.setErr(printStream);
+        safPackageInstance = new SAFPackage();
+    }
 
     public class Console extends OutputStream {
         private TextArea console;
