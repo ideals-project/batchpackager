@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
@@ -20,11 +21,11 @@ public class Controller {
     @FXML
     private TextArea console;
     @FXML
-    private Text csvFilename;
+    private Label csvFilename;
     @FXML
-    private Text sourceDirname;
+    private Label sourceDirname;
     @FXML
-    private Text archiveDirname;
+    private Label archiveDirname;
     @FXML
     private Button chooseCsvButton;
     @FXML
@@ -35,7 +36,8 @@ public class Controller {
     private SAFPackage safPackageInstance;
 
     @FXML
-    protected void handleValidateButtonAction(ActionEvent event) {
+    protected void handleVerifyButtonAction(ActionEvent event) {
+
         messages.setText("validate button pressed");
     }
 

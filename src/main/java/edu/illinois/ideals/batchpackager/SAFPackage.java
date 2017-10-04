@@ -323,7 +323,6 @@ public class SAFPackage {
                     }
                 }
             }
-            contentsWriter.append("src/resources/license.txt");
             contentsWriter.newLine();
             contentsWriter.close();
             xmlWriter.end();
@@ -408,7 +407,7 @@ public class SAFPackage {
                         contentsRow = contentsRow.concat("\t" + parameter.trim());
                     }
                 }
-                contentsRow = contentsRow.concat("\t" + "license.txt");
+                contentsRow = contentsRow.concat("\nlicense.txt" + "\t" + "BUNDLE:LICENSE");
                 contentsWriter.append(contentsRow);
 
                 contentsWriter.newLine();

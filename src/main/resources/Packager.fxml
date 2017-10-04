@@ -23,26 +23,26 @@
         GridPane.columnIndex="0" GridPane.rowIndex="1"
         onAction="#locateMetadataCsvFile"/>
 
-<Text fx:id="csvFilename"
+<Label fx:id="csvFilename" wrapText="true"
       GridPane.columnIndex="1" GridPane.rowIndex="1"/>
 
 <Button maxWidth="Infinity" fx:id="chooseSourceDirectory" text="Choose Content Source Directory"
         GridPane.columnIndex="0" GridPane.rowIndex="2"
         onAction="#locateSourceDirectory"/>
 
-<Text fx:id="sourceDirname"
+<Label fx:id="sourceDirname" wrapText="true"
       GridPane.columnIndex="1" GridPane.rowIndex="2"/>
 
 <Button maxWidth="Infinity" fx:id="chooseDestinationDirectory" text="Choose Archive Destination Directory"
         GridPane.columnIndex="0" GridPane.rowIndex="3"
         onAction="#locateDestinationDirectory"/>
 
-<Text fx:id="archiveDirname"
+<Label fx:id="archiveDirname" wrapText="true"
       GridPane.columnIndex="1" GridPane.rowIndex="3"/>
 
-<Button maxWidth="Infinity" id="validate-button" text="Validate"
+<Button maxWidth="Infinity" id="verify-button" text="Verify file match between csv and source dir."
         GridPane.columnIndex="1" GridPane.rowIndex="5"
-        onAction="#handleValidateButtonAction"/>
+        onAction="#handleVerifyButtonAction"/>
 
 <Button maxWidth="Infinity" id="package-button" text="Generate DSpace SAF Archive"
         GridPane.columnIndex="1" GridPane.rowIndex="6"
