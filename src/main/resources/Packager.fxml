@@ -14,7 +14,7 @@
     <URL value="@Packager.css"/>
 </stylesheets>
 
-<Text id="welcome-text" text="Welcome"
+<Text id="welcome-text" text="IDEALS Batch Packager"
       GridPane.columnIndex="0" GridPane.rowIndex="0"
       GridPane.columnSpan="2"/>
 
@@ -37,7 +37,7 @@
         GridPane.columnIndex="0" GridPane.rowIndex="3"
         onAction="#locateDestinationDirectory"/>
 
-<Text fx:id="destinationDirname"
+<Text fx:id="archiveDirname"
       GridPane.columnIndex="1" GridPane.rowIndex="3"/>
 
 <Button maxWidth="Infinity" id="validate-button" text="Validate"
@@ -48,8 +48,9 @@
         GridPane.columnIndex="1" GridPane.rowIndex="6"
         onAction="#handlePackageButtonAction"/>
 
-<Label fx:id="actiontarget" maxWidth="Infinity" wrapText="true" text="Choose a metadata csv file, content source directory, and archive destination directory to get started."
-       GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="8" GridPane.rowSpan="10"/>
+<TextArea fx:id="messages" maxWidth="Infinity" wrapText="true" text="Choose a metadata csv file, content source directory, and archive destination directory to get started."
+       GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="8" GridPane.rowSpan="2"/>
 
-
+<TextArea fx:id="console" maxWidth="Infinity" wrapText="true"
+          GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="10"/>
 </GridPane>

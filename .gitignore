@@ -59,6 +59,8 @@ cmake-build-debug/
 out/
 .idea
 batchpackager.iml
+/classes
+/target
 
 
 # mpeltonen/sbt-idea plugin

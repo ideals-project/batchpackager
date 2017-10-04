@@ -14,6 +14,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 
 import java.io.*;
+import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -23,11 +24,22 @@ import java.util.regex.Pattern;
 public class SAFPackage {
     private String seperatorRegex = "\\|\\|";   // Using double pipe || to separate multiple values in a field.
 
+    private String licenseString;
+
     // Directory on file system of this input collection
-    private File input;
+    // private File input;
+
+    // Path to Metadata CSV File
+    private File metadataCsvFile;
+
+    // Path to Content Source Directory
+    private File sourceDir;
+
+    // Path to SAF Archive output directory
+    private File archiveDir;
 
     // Storage of the csv data.
-    private CsvReader inputCSV;
+    private CsvReader metadataCsvReader;
 
     private final String simpleArchiveFormat = "SimpleArchiveFormat";
 
@@ -39,8 +51,18 @@ public class SAFPackage {
      * package from input of files and csv metadata.
      */
     public SAFPackage() {
-    }
+        URL licenseTextUrl = getClass().getResource("license.txt");
 
+        try {
+            licenseString =  new Scanner(licenseTextUrl.openStream()).useDelimiter("\\Z").next();
+        }
+        catch(IOException ex) {
+            // there was some connection problem, or the file did not exist on the server,
+            // or your URL was not in the right format.
+            // think about what to do now, and put it here.
+            ex.printStackTrace(); // for now, simply output it.
+        }
+    }
 
     public void setSymbolicLink(boolean symbolicLink) {
         this.symbolicLink = symbolicLink;
@@ -49,21 +71,17 @@ public class SAFPackage {
     /**
      * Gets a "handle" on the metadata file
      *
-     * @param inputDir Path to input directory.
-     * @param metaFile Filename of the CSV
+     * metadata csv File object is created in constructor
      */
-    private void openCSV(String inputDir, String metaFile) {
-        input = new File(inputDir);
+    private void openCSV() {
 
-        if (!inputDir.endsWith("\\/")) {
-            inputDir = inputDir + "/";
-        }
-        String absoluteFileName = inputDir + metaFile;
+        String absoluteFileName = metadataCsvFile.getPath().toString();
+
         try {
             InputStream csvStream = new FileInputStream(absoluteFileName);
-            inputCSV = new CsvReader(csvStream, detectCharsetOfFile(absoluteFileName));
+            metadataCsvReader = new CsvReader(csvStream, detectCharsetOfFile(absoluteFileName));
         } catch (Exception e) {
-            System.out.println(input.getAbsolutePath());
+            System.out.println(absoluteFileName);
             e.printStackTrace();
             System.out.println(e.getMessage());
         }
@@ -109,60 +127,43 @@ public class SAFPackage {
      * make contents file with entries for each filename
      * foreach(metarow.columns as column)
      * add meta entry to metadata xml
+     * add license
      *
-     * @param pathToDirectory Path to the directory containing the content files and CSV
-     * @param metaFileName    Filename of the CSV
+     * @param pathToMetadataCsvFile Path to the metadata CSV file
+     * @param sourceDir Path to the directory containing the content files as source for creating archive
+     * @param archiveDir Path to the directory to put the generated archive
      * @throws java.io.IOException If the files can't be found or created.
      */
-    public void processMetaPack(String pathToDirectory, String metaFileName, Boolean exportToZip) throws IOException {
-        openCSV(pathToDirectory, metaFileName);
+    public void processMetaPack(String pathToMetadataCsvFile, String sourceDir, String archiveDir, Boolean exportToZip) throws IOException {
+
+        this.metadataCsvFile = new File(pathToMetadataCsvFile);
+        this.sourceDir = new File(sourceDir);
+        this.archiveDir = new File(archiveDir);
+
+        openCSV();
 
         scanAllFiles();                                                         // For Reporting file usage
 
-        prepareSimpleArchiveFormatDir();
-
         processMetaHeader();
+
         processMetaBody();
 
         if (exportToZip) {
-            exportToZip(pathToDirectory);
+            exportToZip();
         }
 
         printFiles(0);                                                          // print a report of files not used
     }
 
-    public void processMetaPack(String pathToCSV, Boolean exportToZip) throws IOException {
-        File csvFile = new File(pathToCSV);
-        processMetaPack(csvFile.getParent(), csvFile.getName(), exportToZip);
-    }
-
-    public void exportToZip(String pathToDirectory) {
-        String safDirectory = pathToDirectory + "/" + simpleArchiveFormat;
-        String zipDest = pathToDirectory + "/" + simpleArchiveFormat + ".zip";
+    public void exportToZip() {
+        String safDirectory = archiveDir.getPath();
+        String zipDest = archiveDir + "/" + simpleArchiveFormat + ".zip";
         try {
             ZipUtil.createZip(safDirectory, zipDest);
             System.out.println("ZIP file located at: " + new File(zipDest).getAbsolutePath());
         } catch (IOException e) {
             System.out.println("ERROR Zipping SAF: " + e.getMessage());
         }
-    }
-
-    /**
-     * Creates a clean/empty SimpleArchiveFormat directory for the output to go.
-     */
-    private void prepareSimpleArchiveFormatDir() {
-
-        File newDirectory = new File(input.getPath() + "/" + simpleArchiveFormat);
-        if (newDirectory.exists()) {
-            try {
-                FileUtils.deleteDirectory(newDirectory);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        newDirectory.mkdir();
-        System.out.println("Output directory is: " + newDirectory.getAbsolutePath());
     }
 
     private static String[][] fileListFake;
@@ -172,7 +173,7 @@ public class SAFPackage {
      * Initialize the count for each file found to have zero usages.
      */
     private void scanAllFiles() {
-        String[] files = input.list();
+        String[] files = sourceDir.list();
 
         fileListFake = new String[files.length][2];
         for (int i = 0; i < files.length; i++) {
@@ -222,7 +223,7 @@ public class SAFPackage {
      * @throws IOException If the CSV can't be found or read
      */
     private void processMetaHeader() throws IOException {
-        inputCSV.readHeaders();
+        metadataCsvReader.readHeaders();
     }
 
     /**
@@ -233,7 +234,7 @@ public class SAFPackage {
      * @throws IOException If the CSV can't be found or read
      */
     private String getHeaderField(int columnNum) throws IOException {
-        return inputCSV.getHeader(columnNum);
+        return metadataCsvReader.getHeader(columnNum);
     }
 
     /**
@@ -247,7 +248,7 @@ public class SAFPackage {
         // The implementation of processing CSV starts counting from 0. 0 = header, 1..n = body/content
         int rowNumber = 1;
 
-        while (inputCSV.readRecord()) {
+        while (metadataCsvReader.readRecord()) {
             processMetaBodyRow(rowNumber++);
         }
     }
@@ -263,21 +264,22 @@ public class SAFPackage {
         String dcFileName = currentItemDirectory + "/dublin_core.xml";
         File contentsFile = new File(currentItemDirectory + "/contents");
         File collectionFile = new File(currentItemDirectory + "/collections");
+        writeLicenseFile(currentItemDirectory);
 
         //Specify multiple alternatives for filename, to accept wider input.
-        String[] filenameColumn = {"filename", "bitstream", "bitstreams"};
+        String[] filenameColumn = {"filename", "bitstream", "bitstreams", "BUNDLE:ORIGINAL"};
         String[] filenameWithPartsColumn = {"filename__", "bitstream__", "bitstreams__"};
 
         try {
             BufferedWriter contentsWriter = new BufferedWriter(new FileWriter(contentsFile));
 
-            String[] currentLine = inputCSV.getValues();
+            String[] currentLine = metadataCsvReader.getValues();
 
             OutputXML xmlWriter = new OutputXML(dcFileName);
             xmlWriter.start();
             Map<String, OutputXML> nonDCWriters = new HashMap<String, OutputXML>();
 
-            for (int j = 0; j < inputCSV.getHeaderCount(); j++) {
+            for (int j = 0; j < metadataCsvReader.getHeaderCount(); j++) {
                 if (j >= currentLine.length) {
                     break;
                 }
@@ -320,6 +322,8 @@ public class SAFPackage {
                     }
                 }
             }
+            contentsWriter.append("src/resources/license.txt");
+            contentsWriter.newLine();
             contentsWriter.close();
             xmlWriter.end();
             for (String key : nonDCWriters.keySet()) {
@@ -385,13 +389,12 @@ public class SAFPackage {
 
                 //copying files
                 if (!symbolicLink) {
-                    FileUtils.copyFileToDirectory(new File(input.getPath() + "/" + currentFile), new File(itemDirectory));
+                    FileUtils.copyFileToDirectory(new File(sourceDir.getPath() + "/" + currentFile), new File(itemDirectory));
                 }
                 //instead of copying them, set a symbolicLink
                 else {
-                    Path pathLink = (new File(input.getPath() + "/" + currentFile)).toPath();
-                    File f = new File(currentFile);
-                    Path pathTarget = (new File(itemDirectory + "/" + f.getName())).toPath();
+                    Path pathLink = (new File(sourceDir.getPath() + "/" + currentFile)).toPath();
+                    Path pathTarget = (new File(itemDirectory + "/" + currentFile)).toPath();
                     Files.createSymbolicLink(pathTarget, pathLink);
                 }
                 incrementFileHit(currentFile); //TODO fix file counter to deal with multifiles
@@ -404,11 +407,12 @@ public class SAFPackage {
                         contentsRow = contentsRow.concat("\t" + parameter.trim());
                     }
                 }
+                contentsRow = contentsRow.concat("\t" + "src/resources/license.txt");
                 contentsWriter.append(contentsRow);
 
                 contentsWriter.newLine();
             } catch (FileNotFoundException fnf) {
-                System.out.println("There is no file named " + currentFile + " in " + input.getPath() + " while making " + itemDirectory);
+                System.out.println("There is no file named " + currentFile + " in " + sourceDir.getPath() + " while making " + itemDirectory);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -442,7 +446,7 @@ public class SAFPackage {
      * @return Absolute path to the newly created directory
      */
     private String makeNewDirectory(int itemNumber) {
-        File newDirectory = new File(input.getPath() + "/" + simpleArchiveFormat + "/item_" + itemNumber);
+        File newDirectory = new File(archiveDir.getPath() + "/item_" + itemNumber);
         newDirectory.mkdir();
         return newDirectory.getAbsolutePath();
     }
@@ -460,7 +464,7 @@ public class SAFPackage {
         ArrayList<FileObject> filesCollection = new ArrayList<FileObject>();
 
         FileSystemManager fileSystemManager = VFS.getManager();
-        FileObject tarGZFile = fileSystemManager.resolveFile("tgz://" + input.getPath() + "/" + filename);
+        FileObject tarGZFile = fileSystemManager.resolveFile("tgz://" + sourceDir.getPath() + "/" + filename);
         // List the children of the Jar file
         FileObject[] children = tarGZFile.getChildren();
         for (int i = 0; i < children.length; i++) {
@@ -553,7 +557,7 @@ public class SAFPackage {
         System.out.println("Creating manifest of files in directory:" + directory + " will output results to: " + csvFile);
 
         //TODO, if CSV doesn't exist, errors get reported
-        openCSV(csvFile.getParent(), csvFile.getName());
+        openCSV();
 
         CsvWriter csvWriter = new CsvWriter(pathToCSV);
         String[] header = new String[]{"filename", "dc.title", "dc.contributor.author", "dc.date.issued", "dc.description.abstract", "dc.subject"};
@@ -561,7 +565,7 @@ public class SAFPackage {
             csvWriter.writeRecord(header);
             csvWriter.endRecord();
 
-            String[] files = input.list();
+            String[] files = sourceDir.list();
 
             System.out.print("Building manifest:");
             for (int i = 0; i < files.length; i++) {
@@ -640,6 +644,22 @@ public class SAFPackage {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void writeLicenseFile(String itemDirectory){
+
+        try  {
+
+            File file = new File(itemDirectory + File.separator + "src/resources/license.txt");
+            FileWriter fileWriter = new FileWriter(file);
+            fileWriter.write(licenseString);
+            fileWriter.flush();
+            fileWriter.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }
 

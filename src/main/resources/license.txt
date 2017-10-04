@@ -1,0 +1,36 @@
+IDEALS Blanket Agreement for Batch Deposits
+Non-Exclusive Distribution and Preservation License
+http://ideals.uiuc.edu/
+
+This agreement allows a designee to act on behalf of multiple individual depositors and authorizes the designee to batch load content to the Illinois Digital Environment for Access to Learning and Scholarship (IDEALS).
+
+The designee acknowledges having read all IDEALS policies and agrees to abide by the terms and conditions therein. For content entrusted or gifted to the designee, the designee agrees that making the content available in IDEALS is an appropriate and acceptable extension of its agreement with the depositors, and is consistent with the designee's charge to provide access to this content. In addition, the designee has conveyed to appropriate individual depositors the terms and conditions outlined in those policies, including the language of the standard deposit license quoted below and that the individual depositors have granted the designee the authority to deposit content on their behalf.
+
+The standard deposit license states:
+
+To properly administer the Illinois Digital Environment for Access to Learning and Scholarship (IDEALS) and preserve the contents for future use, the Board of Trustees of the University of Illinois on behalf of its Urbana-Champaign campus (the "University") requires certain permissions and warrants from you, the author(s) and/or copyright owner. If you are the copyright owner, by accepting this license, you still retain copyright to your work and do not give up the right to submit the work to publishers or other repositories. If you are not the copyright owner, you represent that the copyright owner has given you permission to deposit the work.
+
+By accepting (clicking through) this license, you grant to the University the non-exclusive right to reproduce, translate (as described below), and distribute the submission, including the descriptive information (metadata) and abstract, in any format or medium worldwide and royalty-free, including, but not limited to, publication over the Internet, except as provided for by an addendum to this agreement.
+
+When provided, the University will clearly identify your name(s) as the author(s) or copyright owner(s) of the submission as well as the name(s) of the copyright owner(s) if different from your name(s), include a statement of your copyright, and will not make any alteration, other than as allowed by this license, to your submission.
+
+You agree that the University may translate the submission to any medium or format for the purposes of security, back-up, and preservation. You agree that the University may make multiple copies of the submission for the purposes of security, back-up, and preservation.
+
+If you cannot make all of the following representations, then you shall contact the IDEALS Staff at ideals-gen@illinois.edu before proceeding further.  In order to make this submission, you represent that:
+
+1. You have the right to grant the rights contained in the license.
+2. This submission does not, to the best of your knowledge, infringe on anyone's copyright or other intellectual property rights.
+3. If the submission does contain material for which you do not hold copyright and that exceeds fair use, you have obtained the unrestricted permission of the copyright owner to grant the University the rights required by this license and that such third-party owned material is clearly identified and acknowledged within the text or content of the submission.
+4. The submission does not contain any confidential information, proprietary information of others or export controlled information.
+5. There are not any restrictions or required publication delays on the distribution of the submission by the University.
+6. The information you provide about the submission is accurate.
+
+You understand that if copyright terms for, or ownership of, the submission change, it is your responsibility to notify the University of these changes.
+
+You understand that you may request that the submission be withdrawn from IDEALS, and, in such an event, the descriptive information (metadata) will be retained and a copy of the submission will be retained in a 'dark archive' where it is no longer publicly accessible.
+
+If the submission is based upon work that has been sponsored or supported by an agency or organization other than the University, you must fulfill any right of review or other obligations required by the contract or agreement with such an agency or organization before depositing into IDEALS.
+
+By accepting this license, you acknowledge that you have read and agreed to the terms of this agreement and all related IDEALS and University policies.
+
+This document will be stored in IDEALS attached to each deposit submitted under this agreement.

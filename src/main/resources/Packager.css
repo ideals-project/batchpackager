@@ -41,9 +41,16 @@ root {
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
 }
 
-#actiontarget{
+#messages{
     -fx-padding: 20px;
     -fx-background-color: #ffffff;
     -fx-border-color: #540B0E;
+    -fx-border-width: 1px;
+}
+#systemOut{
+    -fx-padding: 20px;
+    -fx-background-color: #ffffff;
+    -fx-border-color: #9E2A2B;
+    -fx-border-width: 3px;
     -fx-border-width: 1px;
 }
