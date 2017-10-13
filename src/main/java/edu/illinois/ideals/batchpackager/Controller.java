@@ -10,10 +10,12 @@ import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 
+
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.util.List;
 
 public class Controller {
     @FXML
@@ -32,29 +34,61 @@ public class Controller {
     private Button chooseSourceDirectory;
     @FXML
     private Button chooseDestinationDirectory;
+
     private PrintStream printStream;
     private SAFPackage safPackageInstance;
 
     @FXML
     protected void handleVerifyButtonAction(ActionEvent event) {
 
-        messages.setText("validate button pressed");
+        console.setText("");
+        messages.setText("");
+
+        boolean requiredSelectionsMade = true;
+
+        if (csvFilename.getText() == null || csvFilename.getText().isEmpty()) {
+            messages.appendText("\nERROR: Metadata CSV not selected");
+            requiredSelectionsMade = false;
+        }
+        if (sourceDirname.getText() == null || sourceDirname.getText().isEmpty()) {
+            messages.appendText("\nERROR: Content source directory not selected.");
+            requiredSelectionsMade = false;
+        }
+
+        if (requiredSelectionsMade) {
+
+            messages.setText("Creating archive...");
+
+            List<String> report = safPackageInstance.verifyMetaPack(csvFilename.getText(), sourceDirname.getText());
+
+            messages.setText("Verification Report Below:");
+
+            for(String reportLine : report){
+                console.appendText("\n" + reportLine);
+            }
+
+        }
+        return;
+
     }
 
     @FXML
     protected void handlePackageButtonAction(ActionEvent event) {
 
+        console.setText("");
+        messages.setText("");
+
         boolean requiredSelectionsMade = true;
 
-        if (csvFilename.getText() == null) {
+        if (csvFilename.getText() == null || csvFilename.getText().isEmpty()) {
             messages.appendText("\nERROR: Metadata CSV not selected");
             requiredSelectionsMade = false;
         }
-        if (sourceDirname.getText() == null) {
+        if (sourceDirname.getText() == null || sourceDirname.getText().isEmpty()) {
             messages.appendText("\nERROR: Content source directory not selected.");
             requiredSelectionsMade = false;
         }
-        if (archiveDirname.getText() == null) {
+        if (archiveDirname.getText() == null || archiveDirname.getText().isEmpty()) {
             messages.appendText("\nERROR: Archive destination directory not selected.");
             requiredSelectionsMade = false;
         }
@@ -63,19 +97,29 @@ public class Controller {
 
             messages.setText("Creating archive...");
 
-            try {
-                safPackageInstance.processMetaPack(csvFilename.getText(), sourceDirname.getText(), archiveDirname.getText(), false);
-                messages.setText("Archive created in " + archiveDirname.getText());
+            List<String> report = safPackageInstance.processMetaPack(csvFilename.getText(), sourceDirname.getText(), archiveDirname.getText(), false);
 
-            } catch (IOException e) {
-                messages.setText("Error encounterd when attempting to create archive. Details below.");
+            if(report.get(0).toLowerCase().contains("error")){
+                messages.setText("Critial Error: PACKAGE NOT CREATED. See below for details.");
+            } else {
+                messages.setText("Archive created in " + archiveDirname.getText() + ". See below for details.");
             }
+
+            for(String reportLine : report){
+
+                console.appendText("\n" + reportLine);
+            }
+
         }
         return;
     }
 
     @FXML
     protected void locateMetadataCsvFile(ActionEvent event) {
+
+        console.clear();
+        messages.clear();
+
         FileChooser chooser = new FileChooser();
         FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("CSV Files (*.csv)", "*.csv");
         chooser.getExtensionFilters().add(extensionFilter);
@@ -88,6 +132,9 @@ public class Controller {
 
     @FXML
     protected void locateSourceDirectory(ActionEvent event) {
+        console.clear();
+        messages.clear();
+
         DirectoryChooser chooser = new DirectoryChooser();
         chooser.setTitle("Choose content files source directory");
         File sourceDirectory = chooser.showDialog(chooseSourceDirectory.getScene().getWindow());
@@ -99,6 +146,10 @@ public class Controller {
 
     @FXML
     protected void locateDestinationDirectory(ActionEvent event) {
+
+        console.clear();
+        messages.clear();
+
         DirectoryChooser chooser = new DirectoryChooser();
         chooser.setTitle("Choose simple archive format destination directory");
         File destinationDirectory = chooser.showDialog(chooseDestinationDirectory.getScene().getWindow());
@@ -108,9 +159,13 @@ public class Controller {
     }
 
     public void initialize() {
+
+        console.clear();
+        messages.clear();
+
         this.printStream = new PrintStream(new Console(console));
-        System.setOut(printStream);
-        System.setErr(printStream);
+        //System.setOut(printStream);
+        //System.setErr(printStream);
         safPackageInstance = new SAFPackage();
     }
 
