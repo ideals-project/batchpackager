@@ -174,6 +174,11 @@ public class SAFPackage {
             verifyMetaBody();
 
             if((invalidHeadersFound.size() == 0) && (requiredHeadersNotFound.size() == 0) && (filesNotFoundInSourceDir.size() == 0)){
+                // refresh all the pointers and readers used up by the verification process
+                openCSV();
+                scanAllFiles();
+                processMetaHeader();
+                // do the thing for real
                 processMetaBody();
             } else {
                 report.add("At least one critical error -- BATCH NOT CREATED");
