@@ -94,7 +94,6 @@
                 <directory>src/main/resources</directory>
                 <includes>
                     <include>license.txt</include>
-                    <include>Packager.css</include>
                     <include>Packager.fxml</include>
                 </includes>
             </resource>
