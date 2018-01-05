@@ -54,23 +54,6 @@ rearchitecting that breaks backwards compatibility in a significant way. Minor
 releases (n.n) either do not break compatibility, or only in a minor way.
 Patch releases (n.n.n) are for bugfixes only.
 
-### Branching
-
-Cantaloupe uses the
-[Gitflow](https://www.atlassian.com/git/tutorials/comparing-workflows#gitflow-workflow)
-branching model. `develop` is the main branch that tracks the current state of
-the next non-bugfix release. Significant features branch off of that into
-feature branches (`feature/feature-name`), from which they can be integrated
-into a particular release.
-
-When a non-bugfix version is ready for release in `develop`, it branches
-off into a new `release/n.n` branch, where its version is set. Finally, that
-is merged into `master`, where the release is tagged and the release
-distribution is created.
-
-Bugfixes that would increment a minor version of a release are applied to the
-release branch for that release, and merged back into `develop`.
-
 ## License
 
 Batchpackager is open-source software distributed under the University of
