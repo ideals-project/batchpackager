@@ -10,11 +10,11 @@
   * custom license
   * custom validation rules
 
-  IDEALS staff and batch generators, please [contact the ideals staff](mailto:ideals@library.illinois.edu).
+  IDEALS staff and batch generators, please [contact the IDEALS staff](mailto:ideals@library.illinois.edu).
 
 # Developers
 
-## Adaptation Tips (not thoroughly investigated)
+## Adaptation Tips
 
 While this tool was developed to meet the specific needs of IDEALS, it could be adapted for use by other DSpace instances.
   * The custom license is in src/main/resources/license.txt.
